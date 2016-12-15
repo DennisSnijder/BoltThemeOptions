@@ -1,38 +1,37 @@
 <?php
-namespace Bolt\Extension\Snijder\BoltThemeOptions\Model;
+
+namespace Bolt\Extension\Snijder\BoltUIOptions\Model;
 
 /**
- * Class Field
+ * Class Field.
  *
  * @author Dennis Snijder <Dennis@Snijder.io>
  */
 class Field
 {
-
     /**
-     * Field name
+     * Field name.
      *
      * @var string
      */
     protected $name;
 
-
     /**
-     * Field slug
+     * Field slug.
      *
      * @var string
      */
     protected $slug;
 
     /**
-     * Field type
+     * Field type.
      *
      * @var string
      */
     protected $type;
 
     /**
-     * Field value
+     * Field value.
      *
      * @var string
      */
@@ -54,7 +53,6 @@ class Field
         $this->name = $name;
     }
 
-
     /**
      * @return string
      */
@@ -70,7 +68,6 @@ class Field
     {
         $this->slug = $slug;
     }
-
 
     /**
      * @return string
@@ -103,6 +100,4 @@ class Field
     {
         $this->value = $value;
     }
-
-
 }

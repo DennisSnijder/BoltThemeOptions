@@ -1,6 +1,6 @@
 <?php
 
-namespace Bolt\Extension\YourName\ExtensionName\Tests;
+namespace Bolt\Extension\YourName\ExtensionName\tests;
 
 use Bolt\Tests\BoltUnitTest;
 use Bolt\Extension\YourName\ExtensionName\ExtensionNameExtension;

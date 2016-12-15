@@ -1,8 +1,9 @@
 <?php
 
-namespace Bolt\Extension\Snijder\BoltThemeOptions\Config;
-use Bolt\Extension\Snijder\BoltThemeOptions\Model\Field;
-use Bolt\Extension\Snijder\BoltThemeOptions\Model\Tab;
+namespace Bolt\Extension\Snijder\BoltUIOptions\Config;
+
+use Bolt\Extension\Snijder\BoltUIOptions\Model\Field;
+use Bolt\Extension\Snijder\BoltUIOptions\Model\Tab;
 
 /**
  * Class Config.
@@ -22,7 +23,7 @@ class Config
     protected $tabs;
 
     /**
-     * Field map
+     * Field map.
      *
      * @var Field[]
      */
@@ -39,20 +40,19 @@ class Config
         $this->initializeFields();
     }
 
-
     /**
-     * Hydrates data into models and store the array in $this object
+     * Hydrates data into models and store the array in $this object.
      */
     protected function initializeFields()
     {
         $rawTabs = $this->rawTabs;
 
-        foreach($rawTabs as $key => $rawTab) {
+        foreach ($rawTabs as $key => $rawTab) {
             $tab = new Tab();
             $tab->setName($rawTab['name']);
             $tab->setId($key);
 
-            foreach($rawTab['fields'] as $rawField) {
+            foreach ($rawTab['fields'] as $rawField) {
                 $field = new Field();
                 $field->setName($rawField['name']);
                 $field->setSlug($rawField['slug']);
@@ -67,7 +67,6 @@ class Config
         }
     }
 
-
     /**
      * @return Tab[]
      */
@@ -76,7 +75,6 @@ class Config
         return $this->tabs;
     }
 
-
     /**
      * @return Field[]
      */
@@ -84,5 +82,4 @@ class Config
     {
         return $this->fields;
     }
-    
 }

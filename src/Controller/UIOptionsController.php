@@ -1,8 +1,8 @@
 <?php
 
-namespace Bolt\Extension\Snijder\BoltThemeOptions\Controller;
+namespace Bolt\Extension\Snijder\BoltUIOptions\Controller;
 
-use Bolt\Extension\Snijder\BoltThemeOptions\Config\Config;
+use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @author Dennis Snijder <Dennis@Snijder.io>
  */
-class ThemeOptionsController implements ControllerProviderInterface
+class UIOptionsController implements ControllerProviderInterface
 {
     /**
      * @var \Twig_Environment
@@ -29,7 +29,7 @@ class ThemeOptionsController implements ControllerProviderInterface
      * ThemeOptionsController constructor.
      *
      * @param \Twig_Environment $twig
-     * @param Config $config
+     * @param Config            $config
      */
     public function __construct(\Twig_Environment $twig, Config $config)
     {
@@ -64,9 +64,9 @@ class ThemeOptionsController implements ControllerProviderInterface
     {
         return new Response(
             $this->twig->render(
-                '@ThemeOptions/options.twig',
+                '@UIOptions/options.twig',
                 [
-                    'tabs' => $this->config->getTabs()
+                    'tabs' => $this->config->getTabs(),
                 ]
             )
         );
@@ -78,5 +78,4 @@ class ThemeOptionsController implements ControllerProviderInterface
     public function handleThemeOptionsFromRequest(Request $request)
     {
     }
-    
 }

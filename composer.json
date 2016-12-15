@@ -1,8 +1,11 @@
 {
-    "name": "snijder/bolt-theme-options",
-    "description": "provides simple options for your bolt theme!",
+    "name": "snijder/bolt-ui-options",
+    "description": "Makes it easy to create an option UI for your Bolt site.",
     "type": "bolt-extension",
     "keywords": [
+      "option",
+      "options",
+      "settings"
     ],
     "require": {
         "bolt/bolt": "^3.0"
@@ -21,17 +24,17 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Bolt\\Extension\\Snijder\\BoltThemeOptions\\": "src"
+            "Bolt\\Extension\\Snijder\\BoltUIOptions\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Bolt\\Extension\\Snijder\\BoltThemeOptions\\Tests\\": "tests",
+            "Bolt\\Extension\\Snijder\\BoltUIOptions\\Tests\\": "tests",
             "Bolt\\Tests\\": "vendor/bolt/bolt/tests/phpunit/unit/"
         }
     },
     "extra": {
         "bolt-assets": "web",
-        "bolt-class": "Bolt\\Extension\\Snijder\\BoltThemeOptions\\BoltThemeOptionsExtension"
+        "bolt-class": "Bolt\\Extension\\Snijder\\BoltUIOptions\\BoltUIOptionsExtension"
     }
 }

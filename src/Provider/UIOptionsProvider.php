@@ -1,9 +1,9 @@
 <?php
 
-namespace Bolt\Extension\Snijder\BoltThemeOptions\Provider;
+namespace Bolt\Extension\Snijder\BoltUIOptions\Provider;
 
-use Bolt\Extension\Snijder\BoltThemeOptions\Config\Config;
-use Bolt\Extension\Snijder\BoltThemeOptions\Controller\ThemeOptionsTwigFunctionController;
+use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
+use Bolt\Extension\Snijder\BoltUIOptions\Controller\UIOptionsTwigFunctionController;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 
@@ -12,7 +12,7 @@ use Silex\ServiceProviderInterface;
  *
  * @author Dennis Snijder <Dennis@Snijder.io>
  */
-class ThemeOptionsProvider implements ServiceProviderInterface
+class UIOptionsProvider implements ServiceProviderInterface
 {
     /**
      * @var array
@@ -39,18 +39,17 @@ class ThemeOptionsProvider implements ServiceProviderInterface
      */
     public function register(Application $app)
     {
-        $app['theme.options.config'] = $app->share(
+        $app['ui.options.config'] = $app->share(
             function () {
                 return new Config($this->config);
             }
         );
 
-        $app['theme.options.twig.function'] = $app->share(
-            function($app) {
-                return new ThemeOptionsTwigFunctionController($app['theme.options.config']);
+        $app['ui.options.twig.function'] = $app->share(
+            function ($app) {
+                return new UIOptionsTwigFunctionController($app['ui.options.config']);
             }
         );
-
     }
 
     /**

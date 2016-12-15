@@ -1,10 +1,10 @@
 <?php
 
-namespace Bolt\Extension\Snijder\BoltThemeOptions;
+namespace Bolt\Extension\Snijder\BoltUIOptions;
 
 use Bolt\Extension\SimpleExtension;
-use Bolt\Extension\Snijder\BoltThemeOptions\Controller\ThemeOptionsController;
-use Bolt\Extension\Snijder\BoltThemeOptions\Provider\ThemeOptionsProvider;
+use Bolt\Extension\Snijder\BoltUIOptions\Controller\UIOptionsController;
+use Bolt\Extension\Snijder\BoltUIOptions\Provider\UIOptionsProvider;
 use Bolt\Menu\MenuEntry;
 
 /**
@@ -12,7 +12,7 @@ use Bolt\Menu\MenuEntry;
  *
  * @author Dennis Snijder <Dennis@Snijder.io>
  */
-class BoltThemeOptionsExtension extends SimpleExtension
+class BoltUIOptionsExtension extends SimpleExtension
 {
     /**
      * {@inheritdoc}
@@ -21,7 +21,7 @@ class BoltThemeOptionsExtension extends SimpleExtension
     {
         return [
            $this,
-           new ThemeOptionsProvider($this->getConfig()),
+           new UIOptionsProvider($this->getConfig()),
        ];
     }
 
@@ -30,8 +30,8 @@ class BoltThemeOptionsExtension extends SimpleExtension
      */
     protected function registerMenuEntries()
     {
-        $menu = new MenuEntry('bolt-theme-options', 'bolt-theme-options');
-        $menu->setLabel('Theme options')
+        $menu = new MenuEntry('bolt-ui-options', 'bolt-ui-options');
+        $menu->setLabel('UI options')
             ->setIcon('fa:columns')
             ->setPermission('settings')
         ;
@@ -47,7 +47,7 @@ class BoltThemeOptionsExtension extends SimpleExtension
     protected function registerTwigPaths()
     {
         return [
-            'templates' => ['namespace' => 'ThemeOptions'],
+            'templates' => ['namespace' => 'UIOptions'],
         ];
     }
 
@@ -57,7 +57,7 @@ class BoltThemeOptionsExtension extends SimpleExtension
     protected function registerTwigFunctions()
     {
         return [
-           'themeoption' => [ [$this->container['theme.options.twig.function'], 'renderThemeOption'] ],
+           'themeoption' => [[$this->container['ui.options.twig.function'], 'renderThemeOption']],
         ];
     }
 
@@ -67,9 +67,9 @@ class BoltThemeOptionsExtension extends SimpleExtension
     protected function registerBackendControllers()
     {
         return [
-          '/extend/bolt-theme-options' => new ThemeOptionsController(
+          '/extend/bolt-ui-options' => new UIOptionsController(
               $this->container['twig'],
-              $this->container['theme.options.config']
+              $this->container['ui.options.config']
           ),
         ];
     }

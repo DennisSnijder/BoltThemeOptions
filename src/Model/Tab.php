@@ -1,29 +1,30 @@
 <?php
-namespace Bolt\Extension\Snijder\BoltThemeOptions\Model;
+
+namespace Bolt\Extension\Snijder\BoltUIOptions\Model;
+
 /**
- * Class Tab
+ * Class Tab.
  *
  * @author Dennis Snijder <Dennis@Snijder.io>
  */
 class Tab
 {
-
     /**
-     * The Tab index / id
+     * The Tab index / id.
      *
-     * @var integer
+     * @var int
      */
     protected $id;
 
     /**
-     * Tab name
+     * Tab name.
      *
      * @var string
      */
     protected $name;
 
     /**
-     * Tab fields
+     * Tab fields.
      *
      * @var Field[]
      */
@@ -44,7 +45,6 @@ class Tab
     {
         $this->id = $id;
     }
-
 
     /**
      * @return string
@@ -82,5 +82,4 @@ class Tab
     {
         $this->fields[] = $field;
     }
-
 }

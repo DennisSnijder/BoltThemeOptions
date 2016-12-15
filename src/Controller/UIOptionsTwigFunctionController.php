@@ -1,14 +1,15 @@
 <?php
-namespace Bolt\Extension\Snijder\BoltThemeOptions\Controller;
-use Bolt\Extension\Snijder\BoltThemeOptions\Config\Config;
+
+namespace Bolt\Extension\Snijder\BoltUIOptions\Controller;
+use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
 
 
 /**
- * Class ThemeOptionsTwigFunctionController
+ * Class ThemeOptionsTwigFunctionController.
  *
  * @author Dennis Snijder <Dennis@Snijder.io>
  */
-class ThemeOptionsTwigFunctionController
+class UIOptionsTwigFunctionController
 {
     /**
      * @var Config
@@ -17,6 +18,7 @@ class ThemeOptionsTwigFunctionController
 
     /**
      * ThemeOptionsTwigFunctionController constructor.
+     *
      * @param Config $config
      */
     public function __construct(Config $config)
@@ -26,12 +28,13 @@ class ThemeOptionsTwigFunctionController
 
     /**
      * @param $name
+     *
      * @return string
      */
     public function renderThemeOption($name)
     {
         $fields = $this->config->getFields();
+
         return  $fields[$name]->getValue();
     }
-    
 }
