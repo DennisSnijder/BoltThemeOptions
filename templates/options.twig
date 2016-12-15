@@ -1,0 +1,46 @@
+{% extends '_base/_page-nav.twig' %}
+
+{% block page_title %}
+    Theme Options
+{% endblock page_title %}
+
+
+{% block page_main %}
+    <div class="col-md-8">
+        <ul class="nav nav-tabs" id="filtertabs">
+            {% for tab in tabs %}
+                <li>
+                    <a href="#tab-{{ tab.getId() }}" data-toggle="tab">{{ tab.getName() }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        {% for tab in tabs %}
+            <div class="tab-content">
+                <div id="tab-{{ tab.getId() }}" class="tab-pane">
+                    {% for field in tab.getFields %}
+
+                        {% if field.getType() == "text" %}
+                            {% include '@ThemeOptions/types/text.twig' with {field: field} %}
+                        {% endif %}
+
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <aside class="col-md-4">
+        <div class="panel panel-default panel-news">
+            <div class="panel-heading">
+                <i class="fa fa-fw fa-cog"></i>
+                Actions</div>
+
+            <div class="panel-body">
+                <a id="saveOptions" class="btn btn-primary">
+                    <i class="fa fa-edit"></i> Save
+                </a>
+            </div>
+        </div>
+    </aside>
+{% endblock page_main %}
