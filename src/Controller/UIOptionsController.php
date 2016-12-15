@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class ThemeOptionsController.
+ * Class UIOptionsController.
  *
  * @author Dennis Snijder <Dennis@Snijder.io>
  */

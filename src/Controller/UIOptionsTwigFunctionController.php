@@ -5,7 +5,7 @@ use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
 
 
 /**
- * Class ThemeOptionsTwigFunctionController.
+ * Class UIOptionsTwigFunctionController.
  *
  * @author Dennis Snijder <Dennis@Snijder.io>
  */

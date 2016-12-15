@@ -8,7 +8,7 @@ use Bolt\Extension\Snijder\BoltUIOptions\Provider\UIOptionsProvider;
 use Bolt\Menu\MenuEntry;
 
 /**
- * Class BoltThemeOptionsExtension.
+ * Class BoltUIOptionsExtension.
  *
  * @author Dennis Snijder <Dennis@Snijder.io>
  */

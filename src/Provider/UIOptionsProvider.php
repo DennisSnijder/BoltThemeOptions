@@ -8,7 +8,7 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 
 /**
- * Class ThemeOptionsProvider.
+ * Class UIOptionsProvider.
  *
  * @author Dennis Snijder <Dennis@Snijder.io>
  */
