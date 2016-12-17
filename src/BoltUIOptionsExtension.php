@@ -57,7 +57,7 @@ class BoltUIOptionsExtension extends SimpleExtension
     protected function registerTwigFunctions()
     {
         return [
-           'uioption' => [[$this->container['ui.options.twig.function'], 'renderThemeOption']],
+           'uioption' => [[$this->container['ui.options.twig.function'], 'renderUIOption']],
         ];
     }
 

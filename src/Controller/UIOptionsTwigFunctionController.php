@@ -31,7 +31,7 @@ class UIOptionsTwigFunctionController
      *
      * @return string
      */
-    public function renderThemeOption($name)
+    public function renderUIOption($name)
     {
         $fields = $this->config->getFields();
 
