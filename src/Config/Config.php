@@ -20,14 +20,14 @@ class Config
     /**
      * @var Tab[]
      */
-    protected $tabs;
+    protected $tabs = [];
 
     /**
      * Field map.
      *
      * @var Field[]
      */
-    protected $fields;
+    protected $fields = [];
 
     /**
      * Config constructor.
@@ -49,8 +49,10 @@ class Config
 
         foreach ($rawTabs as $key => $rawTab) {
             $tab = new Tab();
-            $tab->setName($rawTab['name']);
+
             $tab->setId($key);
+            $tab->setName($rawTab['name']);
+            $tab->setSlug($rawTab['slug']);
 
             foreach ($rawTab['fields'] as $rawField) {
                 $field = new Field();

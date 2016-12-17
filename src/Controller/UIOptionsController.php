@@ -3,6 +3,9 @@
 namespace Bolt\Extension\Snijder\BoltUIOptions\Controller;
 
 use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
+use Bolt\Filesystem\Filesystem;
+use Bolt\Filesystem\Handler\YamlFile;
+use Bolt\Filesystem\Manager;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
@@ -24,17 +27,23 @@ class UIOptionsController implements ControllerProviderInterface
      * @var Config
      */
     private $config;
+    /**
+     * @var Manager
+     */
+    private $filesystem;
 
     /**
      * ThemeOptionsController constructor.
      *
      * @param \Twig_Environment $twig
-     * @param Config            $config
+     * @param Config $config
+     * @param Manager $filesystem
      */
-    public function __construct(\Twig_Environment $twig, Config $config)
+    public function __construct(\Twig_Environment $twig, Config $config, Manager $filesystem)
     {
         $this->twig = $twig;
         $this->config = $config;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -77,5 +86,6 @@ class UIOptionsController implements ControllerProviderInterface
      */
     public function handleThemeOptionsFromRequest(Request $request)
     {
+
     }
 }

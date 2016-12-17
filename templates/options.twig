@@ -21,7 +21,7 @@
                     {% for field in tab.getFields %}
 
                         {% if field.getType() == "text" %}
-                            {% include '@UIOptions/types/text.twig' with {field: field} %}
+                            {% include '@UIOptions/types/text.twig' with {field: field, tab: tab} %}
                         {% endif %}
 
                     {% endfor %}

@@ -24,6 +24,13 @@ class Tab
     protected $name;
 
     /**
+     * Tab slug
+     *
+     * @var string
+     */
+    protected $slug;
+
+    /**
      * Tab fields.
      *
      * @var Field[]
@@ -60,6 +67,22 @@ class Tab
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     }
 
     /**
