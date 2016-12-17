@@ -103,6 +103,6 @@ class Tab
 
     public function addField(Field $field)
     {
-        $this->fields[] = $field;
+        $this->fields[$field->getSlug()] = $field;
     }
 }

@@ -6,6 +6,7 @@
 
 
 {% block page_main %}
+    <form method="post" action="{{ app.url_generator.generate('ui.options.save') }}" >
     <div class="col-md-8">
         <ul class="nav nav-tabs" id="filtertabs">
             {% for tab in tabs %}
@@ -37,10 +38,11 @@
                 Actions</div>
 
             <div class="panel-body">
-                <a id="saveOptions" class="btn btn-primary">
+                <button type="submit" id="saveOptions" class="btn btn-primary">
                     <i class="fa fa-edit"></i> Save
-                </a>
+                </button>
             </div>
         </div>
     </aside>
+    </form>
 {% endblock page_main %}

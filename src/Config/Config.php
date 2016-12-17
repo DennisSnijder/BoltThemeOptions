@@ -36,7 +36,7 @@ class Config
      */
     public function __construct(array $config)
     {
-        $this->rawTabs = $config['options']['tabs'];
+        $this->rawTabs = $config['options'];
         $this->initializeFields();
     }
 
@@ -65,8 +65,37 @@ class Config
                 $tab->addField($field);
             }
 
-            $this->tabs[] = $tab;
+            $this->tabs[$tab->getSlug()] = $tab;
         }
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getArrayOptions()
+    {
+        $resultArray = [];
+
+        foreach ($this->tabs as $tab) {
+            $tabFields = [];
+            foreach ($tab->getFields() as $field) {
+                $tabFields[] = [
+                    'name' => $field->getName(),
+                    'slug' => $field->getSlug(),
+                    'value' => $field->getValue(),
+                    'type' => $field->getType()
+                ];
+            }
+
+            $resultArray[] = [
+                'name' => $tab->getName(),
+                'slug' => $tab->getSlug(),
+                'fields' => $tabFields,
+            ];
+        }
+        
+        return $resultArray;
     }
 
     /**

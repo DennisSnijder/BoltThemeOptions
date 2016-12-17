@@ -70,7 +70,8 @@ class BoltUIOptionsExtension extends SimpleExtension
           '/extend/bolt-ui-options' => new UIOptionsController(
               $this->container['twig'],
               $this->container['ui.options.config'],
-              $this->container['filesystem']
+              $this->container['filesystem'],
+              sprintf('config://extensions/%s.%s.yml', strtolower($this->getName()), strtolower($this->getVendor()))
           ),
         ];
     }

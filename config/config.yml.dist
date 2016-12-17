@@ -1,8 +1,10 @@
 options:
-    tabs:
-        - name: 'Example options'
-          fields:
-             - name: 'First option!'
-               slug: 'option-first'
-               type: 'text'
-               value: 'Hello world!'
+    -
+        name: 'Example options'
+        slug: example-options
+        fields:
+            -
+                name: 'First option!'
+                slug: option-first
+                value: 'Hello world!'
+                type: text
