@@ -2,7 +2,7 @@ bolt-ui-options
 ======================
 This extension makes it easy to create an option panel for your Bolt site.
 
-![alt text](https://i.gyazo.com/5fc8373bbd06fcb20522b0fc265b4e3c.png "Default option screen")
+![alt text](https://i.gyazo.com/a0a8e1f591f8840e16b49cb56567a17e.png "Default option screen")
 
 
 Setup
@@ -16,10 +16,38 @@ options:
         slug: example-options
         fields:
             -
-                name: 'First option!'
-                slug: option-first
-                value: 'Hello world!'
+                name: 'Text option'
+                slug: text-field
+                value: 'Hello textfield!'
                 type: text
+            -
+                name: 'Textarea option'
+                slug: text-area
+                value: "Hello textarea!"
+                type: textarea
+            -
+                name: 'Select option'
+                slug: select-option
+                value: "First option"
+                type: select
+                options:
+                    - "First option"
+                    - "Second option"
+                    - "Third option"
+            -
+                name: 'Date option'
+                slug: date-field
+                value: '2016-12-22'
+                type: date
+    -
+        name: 'More options'
+        slug: options-more
+        fields:
+            -
+                name: 'Another date option'
+                slug: date-field
+                value: '2016-12-22'
+                type: date
 ```
 
 
