@@ -1,0 +1,6 @@
+<div class="option-wrapper">
+    <label for="{{ field.getSlug() }}" class="option-title">{{ field.getName() }}</label>
+    <textarea id="{{ field.getSlug() }}" name="{{ tab.getSlug() }}[{{ field.getSlug() }}]">
+        {{ field.getValue() }}
+    </textarea>
+</div>

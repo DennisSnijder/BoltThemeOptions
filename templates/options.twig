@@ -25,6 +25,10 @@
                             {% include '@UIOptions/types/text.twig' with {field: field, tab: tab} %}
                         {% elseif field.getType() == "date" %}
                             {% include '@UIOptions/types/date.twig' with {field: field, tab: tab} %}
+                        {% elseif field.getType() == "textarea" %}
+                            {% include '@UIOptions/types/textarea.twig' with {field: field, tab: tab} %}
+                        {% elseif field.getType() == "select" %}
+                            {% include '@UIOptions/types/select.twig' with {field: field, tab: tab} %}
                         {% endif %}
 
                     {% endfor %}

@@ -38,6 +38,13 @@ class Field
     protected $value;
 
     /**
+     * Field options, mainly used in select type fields.
+     *
+     * @var string[]
+     */
+    protected $options;
+
+    /**
      * @return string
      */
     public function getName()
@@ -99,5 +106,21 @@ class Field
     public function setValue($value)
     {
         $this->value = $value;
+    }
+
+    /**
+     * @return \string[]
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param \string[] $options
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
     }
 }

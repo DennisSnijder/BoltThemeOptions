@@ -1,0 +1,10 @@
+<div class="option-wrapper">
+    <label for="{{ field.getSlug() }}" class="option-title">{{ field.getName() }}</label>
+
+    <select  id="{{ field.getSlug() }}" name="{{ tab.getSlug() }}[{{ field.getSlug() }}]">
+        {% for option in field.getOptions() %}
+            <option {% if field.getValue() == option %} selected {% endif %} value="{{ option }}">{{ option }}</option>
+        {% endfor %}
+    </select>
+
+</div>

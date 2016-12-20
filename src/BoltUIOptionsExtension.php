@@ -16,6 +16,12 @@ use Bolt\Menu\MenuEntry;
  */
 class BoltUIOptionsExtension extends SimpleExtension
 {
+
+    /**
+     * @var string
+     */
+    private $backendURL = "bolt-ui-options";
+
     /**
      * {@inheritdoc}
      */
@@ -32,7 +38,7 @@ class BoltUIOptionsExtension extends SimpleExtension
      */
     protected function registerMenuEntries()
     {
-        $menu = new MenuEntry('bolt-ui-options', 'bolt-ui-options');
+        $menu = new MenuEntry('bolt-ui-options', $this->backendURL);
         $menu->setLabel('UI options')
             ->setIcon('fa:columns')
             ->setPermission('settings')
@@ -69,7 +75,7 @@ class BoltUIOptionsExtension extends SimpleExtension
     protected function registerBackendControllers()
     {
         return [
-          '/extend/bolt-ui-options' => new UIOptionsController(
+          "/extend/" . $this->backendURL => new UIOptionsController(
               $this->container['twig'],
               $this->container['ui.options.config'],
               $this->container['filesystem'],

@@ -61,6 +61,10 @@ class Config
                 $field->setValue($rawField['value']);
                 $field->setType($rawField['type']);
 
+                if(isset($rawField['options'])) {
+                    $field->setOptions($rawField['options']);
+                }
+
                 $this->fields[$field->getSlug()] = $field;
                 $tab->addField($field);
             }
@@ -80,12 +84,20 @@ class Config
         foreach ($this->tabs as $tab) {
             $tabFields = [];
             foreach ($tab->getFields() as $field) {
-                $tabFields[] = [
+
+                $newField = [
                     'name' => $field->getName(),
                     'slug' => $field->getSlug(),
                     'value' => $field->getValue(),
                     'type' => $field->getType()
                 ];
+
+
+                if($field->getOptions() != []) {
+                    $newField['options'] = $field->getOptions();
+                }
+
+                $tabFields[] = $newField;
             }
 
             $resultArray[] = [
