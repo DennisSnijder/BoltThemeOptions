@@ -45,7 +45,7 @@ options:
         fields:
             -
                 name: 'Another date option'
-                slug: date-field
+                slug: another-date-field
                 value: '2016-12-22'
                 type: date
 ```
