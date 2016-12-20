@@ -2,6 +2,7 @@
 
 namespace Bolt\Extension\YourName\ExtensionName\tests;
 
+use Bolt\Extension\Snijder\BoltUIOptions\BoltUIOptionsExtension;
 use Bolt\Tests\BoltUnitTest;
 use Bolt\Extension\YourName\ExtensionName\ExtensionNameExtension;
 
@@ -18,10 +19,10 @@ class ExtensionTest extends BoltUnitTest
     public function testExtensionBasics()
     {
         $app = $this->getApp(false);
-        $extension = new ExtensionNameExtension($app);
+        $extension = new BoltUIOptionsExtension($app);
 
         $name = $extension->getName();
-        $this->assertSame($name, 'ExtensionName');
+        $this->assertSame($name, 'BoltUIOptions');
         $this->assertInstanceOf('\Bolt\Extension\ExtensionInterface', $extension);
     }
 
