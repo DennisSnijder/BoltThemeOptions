@@ -4,4 +4,15 @@
 
 .option-wrapper input {
     padding: 5px;
+    width: 40%;
+}
+
+.option-wrapper textarea {
+    padding: 5px;
+    width: 40%;
+}
+
+.option-wrapper select {
+    width: 40%;
+    padding: 5px;
 }

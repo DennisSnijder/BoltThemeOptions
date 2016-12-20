@@ -2,6 +2,9 @@ bolt-ui-options
 ======================
 This extension makes it easy to create an option panel for your Bolt site.
 
+![alt text](https://i.gyazo.com/5fc8373bbd06fcb20522b0fc265b4e3c.png "Default option screen")
+
+
 Setup
 ======================
 Define tabs and option fields in the extension its config file.
