@@ -36,6 +36,7 @@
     "extra": {
         "bolt-assets": "web",
         "bolt-class": "Bolt\\Extension\\Snijder\\BoltUIOptions\\BoltUIOptionsExtension",
+        "bolt-icon": "assets/icon.png",
         "bolt-screenshots": [
             "assets/screenshots/main-options.png",
             "assets/screenshots/setting-yml.png"
