@@ -35,6 +35,9 @@
     },
     "extra": {
         "bolt-assets": "web",
-        "bolt-class": "Bolt\\Extension\\Snijder\\BoltUIOptions\\BoltUIOptionsExtension"
+        "bolt-class": "Bolt\\Extension\\Snijder\\BoltUIOptions\\BoltUIOptionsExtension",
+        "bolt-screenshots": [
+            "assets/screenshots/main-options.png"
+        ]
     }
 }
