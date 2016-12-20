@@ -6,11 +6,14 @@ use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
 use Bolt\Filesystem\Filesystem;
 use Bolt\Filesystem\Handler\YamlFile;
 use Bolt\Filesystem\Manager;
+use Bolt\Routing\UrlGeneratorFragmentWrapper;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
  * Class UIOptionsController.
@@ -37,23 +40,31 @@ class UIOptionsController implements ControllerProviderInterface
     private $optionFilePath;
 
     /**
+     * @var UrlGeneratorFragmentWrapper
+     */
+    private $urlGenerator;
+
+    /**
      * ThemeOptionsController constructor.
      *
      * @param \Twig_Environment $twig
      * @param Config $config
      * @param Manager $filesystem
+     * @param UrlGeneratorFragmentWrapper $urlGenerator
      * @param $optionFilePath
      */
     public function __construct(
         \Twig_Environment $twig,
         Config $config,
         Manager $filesystem,
+        UrlGeneratorFragmentWrapper $urlGenerator,
         $optionFilePath
     )
     {
         $this->twig = $twig;
         $this->config = $config;
         $this->filesystem = $filesystem;
+        $this->urlGenerator = $urlGenerator;
         $this->optionFilePath = $optionFilePath;
     }
 
@@ -69,7 +80,7 @@ class UIOptionsController implements ControllerProviderInterface
         /** @var ControllerCollection $controllers */
         $controllers = $app['controllers_factory'];
 
-        $controllers->get('/', [$this, 'renderThemeOptionsBackendPage']);
+        $controllers->get('/', [$this, 'renderThemeOptionsBackendPage'])->bind('ui.options');
         $controllers->post('/post', [$this, 'handleThemeOptionsSaveFromRequest'])->bind('ui.options.save');
 
         return $controllers;
@@ -127,6 +138,6 @@ class UIOptionsController implements ControllerProviderInterface
             'inline' => 7
         ]);
 
-        return new Response("Done!");
+        return new RedirectResponse($this->urlGenerator->generate('ui.options'));
     }
 }
