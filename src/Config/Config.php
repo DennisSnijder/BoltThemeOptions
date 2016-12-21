@@ -22,6 +22,12 @@ class Config
      */
     protected $tabs = [];
 
+
+    /**
+     * @var Tab[]
+     */
+    protected $themeTabs = [];
+
     /**
      * Field map.
      *
@@ -36,41 +42,55 @@ class Config
      */
     public function __construct(array $config)
     {
-        $this->rawTabs = $config['options'];
-        $this->initializeFields();
+        $this->addExtensionTabs($config['options']);
     }
 
     /**
      * Hydrates data into models and store the array in $this object.
+     * @param $rawTabs
      */
-    protected function initializeFields()
+    protected function addExtensionTabs($rawTabs)
     {
-        $rawTabs = $this->rawTabs;
-
         foreach ($rawTabs as $key => $rawTab) {
-            $tab = new Tab();
-
-            $tab->setId($key);
-            $tab->setName($rawTab['name']);
-            $tab->setSlug($rawTab['slug']);
-
-            foreach ($rawTab['fields'] as $rawField) {
-                $field = new Field();
-                $field->setName($rawField['name']);
-                $field->setSlug($rawField['slug']);
-                $field->setValue($rawField['value']);
-                $field->setType($rawField['type']);
-
-                if(isset($rawField['options'])) {
-                    $field->setOptions($rawField['options']);
-                }
-
-                $this->fields[$field->getSlug()] = $field;
-                $tab->addField($field);
-            }
-
+            $tab = $this->convertTabAndFields($rawTab, $key);
             $this->tabs[$tab->getSlug()] = $tab;
         }
+    }
+
+
+    public function addThemeTabs($rawTabs)
+    {
+        foreach ($rawTabs as $key => $rawTab) {
+            $tab = $this->convertTabAndFields($rawTab, $key);
+            $this->themeTabs[$tab->getSlug()] = $tab;
+        }
+    }
+
+
+    protected function convertTabAndFields($rawTab, $key)
+    {
+        $tab = new Tab();
+
+        $tab->setId($key);
+        $tab->setName($rawTab['name']);
+        $tab->setSlug($rawTab['slug']);
+
+        foreach ($rawTab['fields'] as $rawField) {
+            $field = new Field();
+            $field->setName($rawField['name']);
+            $field->setSlug($rawField['slug']);
+            $field->setValue($rawField['value']);
+            $field->setType($rawField['type']);
+
+            if(isset($rawField['options'])) {
+                $field->setOptions($rawField['options']);
+            }
+
+            $this->fields[$field->getSlug()] = $field;
+            $tab->addField($field);
+        }
+
+        return $tab;
     }
 
 
@@ -119,10 +139,19 @@ class Config
     }
 
     /**
+     * @return Tab[]
+     */
+    public function getThemeTabs()
+    {
+        return $this->themeTabs;
+    }
+
+    /**
      * @return Field[]
      */
     public function getFields()
     {
         return $this->fields;
     }
+
 }

@@ -98,6 +98,7 @@ class UIOptionsController implements ControllerProviderInterface
                 '@UIOptions/options.twig',
                 [
                     'tabs' => $this->config->getTabs(),
+                    'themeTabs' => $this->config->getThemeTabs()
                 ]
             )
         );

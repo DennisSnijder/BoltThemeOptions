@@ -6,52 +6,79 @@
 
 
 {% block page_main %}
-    <form method="post" action="{{ app.url_generator.generate('ui.options.save') }}" >
-    <div class="col-md-8">
-        <ul class="nav nav-tabs" id="filtertabs">
-            {% for tab in tabs %}
-                <li {% if tab.getId() == 0 %} class="active" {% endif %} >
-                    <a href="#tab-{{ tab.getId() }}" data-toggle="tab">{{ tab.getName() }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+    <form method="post" action="{{ app.url_generator.generate('ui.options.save') }}">
+        <div class="col-md-8">
+            <ul class="nav nav-tabs" id="filtertabs">
+                {% for tab in tabs %}
+                    <li {% if tab.getId() == 0 %} class="active" {% endif %} >
+                        <a href="#tab-{{ tab.getId() }}" data-toggle="tab">{{ tab.getName() }}</a>
+                    </li>
+                {% endfor %}
 
-        <div class="tab-content ui-options">
-        {% for tab in tabs %}
-                <div id="tab-{{ tab.getId() }}" class="tab-pane {% if tab.getId() == 0 %} active {% endif %} ">
-                    {% for field in tab.getFields %}
+                {% for tab in themeTabs %}
+                    <li {% if tab.getId() == 0 %} class="active" {% endif %} >
+                        <a href="#tab-theme-{{ tab.getId() }}" data-toggle="tab">{{ tab.getName() }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
 
-                        {% if field.getType() == "text" %}
-                            {% include '@UIOptions/types/text.twig' with {field: field, tab: tab} %}
-                        {% elseif field.getType() == "date" %}
-                            {% include '@UIOptions/types/date.twig' with {field: field, tab: tab} %}
-                        {% elseif field.getType() == "textarea" %}
-                            {% include '@UIOptions/types/textarea.twig' with {field: field, tab: tab} %}
-                        {% elseif field.getType() == "select" %}
-                            {% include '@UIOptions/types/select.twig' with {field: field, tab: tab} %}
-                        {% endif %}
+            <div class="tab-content ui-options">
+                {% for tab in tabs %}
+                    <div id="tab-{{ tab.getId() }}" class="tab-pane {% if tab.getId() == 0 %} active {% endif %} ">
+                        {% for field in tab.getFields %}
 
-                    {% endfor %}
-                </div>
-        {% endfor %}
-            <button type="submit" class="btn btn-primary">
-                <i class="fa fa-edit"></i> Save
-            </button>
-        </div>
-    </div>
+                            {% if field.getType() == "text" %}
+                                {% include '@UIOptions/types/text.twig' with {field: field, tab: tab} %}
+                            {% elseif field.getType() == "date" %}
+                                {% include '@UIOptions/types/date.twig' with {field: field, tab: tab} %}
+                            {% elseif field.getType() == "textarea" %}
+                                {% include '@UIOptions/types/textarea.twig' with {field: field, tab: tab} %}
+                            {% elseif field.getType() == "select" %}
+                                {% include '@UIOptions/types/select.twig' with {field: field, tab: tab} %}
+                            {% endif %}
 
-    <aside class="col-md-4">
-        <div class="panel panel-default panel-news">
-            <div class="panel-heading">
-                <i class="fa fa-fw fa-cog"></i>
-                Actions</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
 
-            <div class="panel-body">
+                {% for tab in themeTabs %}
+                    <div id="tab-theme-{{ tab.getId() }}"
+                         class="tab-pane {% if tab.getId() == 0 %} active {% endif %} ">
+                        {% for field in tab.getFields %}
+
+                            {% if field.getType() == "text" %}
+                                {% include '@UIOptions/types/text.twig' with {field: field, tab: tab} %}
+                            {% elseif field.getType() == "date" %}
+                                {% include '@UIOptions/types/date.twig' with {field: field, tab: tab} %}
+                            {% elseif field.getType() == "textarea" %}
+                                {% include '@UIOptions/types/textarea.twig' with {field: field, tab: tab} %}
+                            {% elseif field.getType() == "select" %}
+                                {% include '@UIOptions/types/select.twig' with {field: field, tab: tab} %}
+                            {% endif %}
+
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
                 <button type="submit" class="btn btn-primary">
                     <i class="fa fa-edit"></i> Save
                 </button>
             </div>
         </div>
-    </aside>
+
+        <aside class="col-md-4">
+            <div class="panel panel-default panel-news">
+                <div class="panel-heading">
+                    <i class="fa fa-fw fa-cog"></i>
+                    Actions
+                </div>
+
+                <div class="panel-body">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-edit"></i> Save
+                    </button>
+                </div>
+            </div>
+        </aside>
     </form>
 {% endblock page_main %}

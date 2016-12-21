@@ -6,6 +6,8 @@ use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
 use Bolt\Extension\Snijder\BoltUIOptions\Controller\UIOptionsTwigFunctionController;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
+use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class UIOptionsProvider.
@@ -50,6 +52,23 @@ class UIOptionsProvider implements ServiceProviderInterface
                 return new UIOptionsTwigFunctionController($app['ui.options.config']);
             }
         );
+
+
+        $app->extend('ui.options.config', function(Config $config) use ($app) {
+
+            $path = $app['resources']->getPath('theme');
+
+            $yamlParser = new Parser();
+            $rawThemeconfig = file_get_contents($path."/theme.yml");
+            $options = $yamlParser->parse($rawThemeconfig);
+
+            if(!empty($options['options'])) {
+                $config->addThemeTabs($options['options']);
+            }
+
+            return $config;
+        });
+
     }
 
     /**
