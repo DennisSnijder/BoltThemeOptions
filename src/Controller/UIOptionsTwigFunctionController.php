@@ -1,8 +1,8 @@
 <?php
 
 namespace Bolt\Extension\Snijder\BoltUIOptions\Controller;
-use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
 
+use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
 
 /**
  * Class UIOptionsTwigFunctionController.
@@ -35,8 +35,8 @@ class UIOptionsTwigFunctionController
     {
         $fields = $this->config->getFields();
 
-        if($fields[$name] == null) {
-            return "";
+        if ($fields[$name] == null) {
+            return '';
         }
 
         return  $fields[$name]->getValue();

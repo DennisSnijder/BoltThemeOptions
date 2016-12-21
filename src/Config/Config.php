@@ -46,6 +46,7 @@ class Config
 
     /**
      * Hydrates data into models and store the array in $this object.
+     *
      * @param $rawTabs
      */
     protected function addExtensionTabs($rawTabs)
@@ -56,10 +57,8 @@ class Config
         }
     }
 
-
     public function addThemeTabs($rawTabs)
     {
-
         $keyOffset = count($this->tabs);
 
         foreach ($rawTabs as $key => $rawTab) {
@@ -67,7 +66,6 @@ class Config
             $this->themeTabs[$tab->getSlug()] = $tab;
         }
     }
-
 
     protected function convertTabAndFields($rawTab, $key)
     {
@@ -84,7 +82,7 @@ class Config
             $field->setValue($rawField['value']);
             $field->setType($rawField['type']);
 
-            if(isset($rawField['options'])) {
+            if (isset($rawField['options'])) {
                 $field->setOptions($rawField['options']);
             }
 
@@ -95,34 +93,32 @@ class Config
         return $tab;
     }
 
-
     /**
      * @param bool $themeTabs
+     *
      * @return array
      */
     public function getArrayOptions($themeTabs = false)
     {
         $resultArray = [];
 
-        if($themeTabs) {
+        if ($themeTabs) {
             $tabs = $this->getThemeTabs();
-        }else {
+        } else {
             $tabs = $this->tabs;
         }
 
         foreach ($tabs as $tab) {
             $tabFields = [];
             foreach ($tab->getFields() as $field) {
-
                 $newField = [
                     'name' => $field->getName(),
                     'slug' => $field->getSlug(),
                     'value' => $field->getValue(),
-                    'type' => $field->getType()
+                    'type' => $field->getType(),
                 ];
 
-
-                if($field->getOptions() != []) {
+                if ($field->getOptions() != []) {
                     $newField['options'] = $field->getOptions();
                 }
 
@@ -135,7 +131,7 @@ class Config
                 'fields' => $tabFields,
             ];
         }
-        
+
         return $resultArray;
     }
 
@@ -162,5 +158,4 @@ class Config
     {
         return $this->fields;
     }
-
 }

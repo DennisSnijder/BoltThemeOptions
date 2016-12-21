@@ -8,8 +8,6 @@ use Bolt\Filesystem\Exception\IOException;
 use Bolt\Filesystem\Handler\YamlFile;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Symfony\Component\Yaml\Parser;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class UIOptionsProvider.
@@ -55,24 +53,22 @@ class UIOptionsProvider implements ServiceProviderInterface
             }
         );
 
-        $app->extend('ui.options.config', function(Config $config) use ($app) {
-
+        $app->extend('ui.options.config', function (Config $config) use ($app) {
             try {
                 /** @var YamlFile $file */
-                $file = $app['filesystem']->get("theme://theme.yml");
-            }catch(IOException $e) {
+                $file = $app['filesystem']->get('theme://theme.yml');
+            } catch (IOException $e) {
                 return $config;
             }
 
             $options = $file->parse();
 
-            if(!empty($options['ui-options'])) {
+            if (!empty($options['ui-options'])) {
                 $config->addThemeTabs($options['ui-options']);
             }
 
             return $config;
         });
-
     }
 
     /**

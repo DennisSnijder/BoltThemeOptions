@@ -3,7 +3,8 @@
 namespace Bolt\Extension\Snijder\BoltUIOptions\Controller;
 
 use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
-use Bolt\Filesystem\Filesystem;
+use Bolt\Extension\Snijder\BoltUIOptions\Model\Tab;
+use Bolt\Filesystem\Exception\DumpException;
 use Bolt\Filesystem\Handler\YamlFile;
 use Bolt\Filesystem\Manager;
 use Bolt\Routing\UrlGeneratorFragmentWrapper;
@@ -13,8 +14,7 @@ use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Generator\UrlGenerator;
-use Symfony\Component\Yaml\Parser;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class UIOptionsController.
@@ -48,14 +48,19 @@ class UIOptionsController implements ControllerProviderInterface
      * @var
      */
     private $themeFilePath;
+    /**
+     * @var Session
+     */
+    private $session;
 
     /**
      * ThemeOptionsController constructor.
      *
-     * @param \Twig_Environment $twig
-     * @param Config $config
-     * @param Manager $filesystem
+     * @param \Twig_Environment           $twig
+     * @param Config                      $config
+     * @param Manager                     $filesystem
      * @param UrlGeneratorFragmentWrapper $urlGenerator
+     * @param Session                     $session
      * @param $optionFilePath
      * @param $themeFilePath
      */
@@ -64,16 +69,17 @@ class UIOptionsController implements ControllerProviderInterface
         Config $config,
         Manager $filesystem,
         UrlGeneratorFragmentWrapper $urlGenerator,
+        Session $session,
         $optionFilePath,
         $themeFilePath
-    )
-    {
+    ) {
         $this->twig = $twig;
         $this->config = $config;
         $this->filesystem = $filesystem;
         $this->urlGenerator = $urlGenerator;
         $this->optionFilePath = $optionFilePath;
         $this->themeFilePath = $themeFilePath;
+        $this->session = $session;
     }
 
     /**
@@ -106,95 +112,150 @@ class UIOptionsController implements ControllerProviderInterface
                 '@UIOptions/options.twig',
                 [
                     'tabs' => $this->config->getTabs(),
-                    'themeTabs' => $this->config->getThemeTabs()
+                    'themeTabs' => $this->config->getThemeTabs(),
                 ]
             )
         );
     }
 
     /**
+     * Handles the request for ui options saving, on both extension and theme options.
+     *
      * @param Request $request
+     *
      * @return Response
      */
     public function handleThemeOptionsSaveFromRequest(Request $request)
     {
-        if($request->get('extension')) {
-            $this->saveExtensionOptions($request->get('extension'));
+        if ($request->get('extension')) {
+            if ($this->saveExtensionOptions($request->get('extension'))) {
+                $this->session->getFlashBag()->add('ui-options', [
+                    'type' => 'success',
+                    'message' => 'Extension options successfully updated!',
+                ]);
+            }
         }
 
-        if($request->get('theme')) {
-            $this->saveThemeOptions($request->get('theme'));
+        if ($request->get('theme')) {
+            if ($this->saveThemeOptions($request->get('theme'))) {
+                $this->session->getFlashBag()->add('ui-options', [
+                    'type' => 'success',
+                    'message' => 'Theme options successfully updated!',
+                ]);
+            }
         }
 
         return new RedirectResponse($this->urlGenerator->generate('ui.options'));
     }
 
     /**
+     * Saves options into the extension its config file.
+     *
      * @param $requestOptions
+     *
+     * @return bool
      */
     protected function saveExtensionOptions($requestOptions)
     {
-        $file = new YamlFile();
-        $this->filesystem->getFile($this->optionFilePath, $file);
-        $rawOptions = $file->parse();
+        $rawOptions = $this->getParsedYamlFile($this->themeFilePath);
+        $this->updateTabs($this->config->getTabs(), $requestOptions);
 
-        //todo check keys for existence
-        $tabs = $this->config->getTabs();
-        foreach ($requestOptions as $tabKey => $rawFields) {
-            $tab = $tabs[$tabKey];
+        if (isset($rawOptions['ui-options'])) {
+            $rawOptions['ui-options'] = $this->config->getArrayOptions();
 
-            $fields = $tab->getFields();
-            foreach ($rawFields as $fieldKey => $value) {
-                $field = $fields[$fieldKey];
-                $field->setValue($value);
-            }
+            return $this->saveYamlFile($rawOptions, $this->optionFilePath);
         }
 
-        //todo check for options key existence
-        $rawOptions['ui-options'] = $this->config->getArrayOptions();
-
-        $newFile = new YamlFile();
-        $newFile->setFilesystem($this->filesystem);
-        $newFile->setPath($this->optionFilePath);
-
-        $newFile->dump($rawOptions, [
-            'objectSupport' => true,
-            'inline' => 7
-        ]);
+        return false;
     }
 
     /**
+     * Saves options into the theme.yml file.
+     *
      * @param $requestOptions
+     *
+     * @return bool
      */
     protected function saveThemeOptions($requestOptions)
     {
-        $file = new YamlFile();
-        $this->filesystem->getFile($this->themeFilePath, $file);
-        $rawOptions = $file->parse();
+        $rawOptions = $this->getParsedYamlFile($this->themeFilePath);
+        $this->updateTabs($this->config->getThemeTabs(), $requestOptions);
 
-        //todo check keys for existence
-        $tabs = $this->config->getThemeTabs();
-        foreach ($requestOptions as $tabKey => $rawFields) {
+        if (isset($rawOptions['ui-options'])) {
+            $rawOptions['ui-options'] = $this->config->getArrayOptions(true);
+
+            return $this->saveYamlFile($rawOptions, $this->themeFilePath);
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets a parsed Yaml file by its path.
+     *
+     * @param $path
+     *
+     * @return mixed
+     */
+    protected function getParsedYamlFile($path)
+    {
+        $file = new YamlFile();
+        $this->filesystem->getFile($path, $file);
+
+        return $file->parse();
+    }
+
+    /**
+     * Updates the tabs in the Config class.
+     *
+     * @param Tab[] $tabs
+     * @param array $data
+     */
+    protected function updateTabs($tabs, $data)
+    {
+        foreach ($data as $tabKey => $rawFields) {
+            if (!isset($tabs[$tabKey])) {
+                continue;
+            }
+
+            /** @var Tab $tab */
             $tab = $tabs[$tabKey];
 
             $fields = $tab->getFields();
             foreach ($rawFields as $fieldKey => $value) {
+                if (!isset($fields[$fieldKey])) {
+                    continue;
+                }
+
                 $field = $fields[$fieldKey];
                 $field->setValue($value);
             }
         }
-
-        //todo check for options key existence
-        $rawOptions['ui-options'] = $this->config->getArrayOptions(true);
-
-        $newFile = new YamlFile();
-        $newFile->setFilesystem($this->filesystem);
-        $newFile->setPath($this->themeFilePath);
-
-        $newFile->dump($rawOptions, [
-            'objectSupport' => true,
-            'inline' => 7
-        ]);
     }
 
+    /**
+     * Saves the Yaml file.
+     *
+     * @param array $data
+     * @param $path
+     *
+     * @return bool
+     */
+    protected function saveYamlFile(array $data, $path)
+    {
+        $newFile = new YamlFile();
+        $newFile->setFilesystem($this->filesystem);
+        $newFile->setPath($path);
+
+        try {
+            $newFile->dump($data, [
+                'objectSupport' => true,
+                'inline' => 7,
+            ]);
+
+            return true;
+        } catch (DumpException $e) {
+            return false;
+        }
+    }
 }

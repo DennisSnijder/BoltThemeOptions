@@ -16,11 +16,10 @@ use Bolt\Menu\MenuEntry;
  */
 class BoltUIOptionsExtension extends SimpleExtension
 {
-
     /**
      * @var string
      */
-    private $backendURL = "bolt-ui-options";
+    private $backendURL = 'bolt-ui-options';
 
     /**
      * {@inheritdoc}
@@ -75,13 +74,14 @@ class BoltUIOptionsExtension extends SimpleExtension
     protected function registerBackendControllers()
     {
         return [
-          "/extend/" . $this->backendURL => new UIOptionsController(
+          '/extend/'.$this->backendURL => new UIOptionsController(
               $this->container['twig'],
               $this->container['ui.options.config'],
               $this->container['filesystem'],
               $this->container['url_generator'],
+              $this->container['session'],
               sprintf('config://extensions/%s.%s.yml', strtolower($this->getName()), strtolower($this->getVendor())),
-              "theme://theme.yml"
+              'theme://theme.yml'
           ),
         ];
     }
@@ -102,5 +102,4 @@ class BoltUIOptionsExtension extends SimpleExtension
             $asset,
         ];
     }
-
 }

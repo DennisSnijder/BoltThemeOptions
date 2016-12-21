@@ -24,7 +24,7 @@ class Tab
     protected $name;
 
     /**
-     * Tab slug
+     * Tab slug.
      *
      * @var string
      */
