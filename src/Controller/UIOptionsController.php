@@ -135,7 +135,7 @@ class UIOptionsController implements ControllerProviderInterface
     protected function saveExtensionOptions($requestOptions)
     {
         $file = new YamlFile();
-        $this->filesystem->getFile($this->themeFilePath, $file);
+        $this->filesystem->getFile($this->optionFilePath, $file);
         $rawOptions = $file->parse();
 
         //todo check keys for existence
@@ -151,11 +151,11 @@ class UIOptionsController implements ControllerProviderInterface
         }
 
         //todo check for options key existence
-        $rawOptions['options'] = $this->config->getArrayOptions();
+        $rawOptions['ui-options'] = $this->config->getArrayOptions();
 
         $newFile = new YamlFile();
         $newFile->setFilesystem($this->filesystem);
-        $newFile->setPath($this->themeFilePath);
+        $newFile->setPath($this->optionFilePath);
 
         $newFile->dump($rawOptions, [
             'objectSupport' => true,
@@ -168,9 +168,9 @@ class UIOptionsController implements ControllerProviderInterface
      */
     protected function saveThemeOptions($requestOptions)
     {
-        $yamlParser = new Parser();
-        $rawThemeconfig = file_get_contents($this->themeFilePath."/theme.yml");
-        $rawOptions = $yamlParser->parse($rawThemeconfig);
+        $file = new YamlFile();
+        $this->filesystem->getFile($this->themeFilePath, $file);
+        $rawOptions = $file->parse();
 
         //todo check keys for existence
         $tabs = $this->config->getThemeTabs();
