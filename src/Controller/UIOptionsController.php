@@ -133,6 +133,11 @@ class UIOptionsController implements ControllerProviderInterface
                     'type' => 'success',
                     'message' => 'Extension options successfully updated!',
                 ]);
+            }else {
+                $this->session->getFlashBag()->add('ui-options', [
+                    'type' => 'danger',
+                    'message' => 'Something went wrong while saving extension options!',
+                ]);
             }
         }
 
@@ -141,6 +146,11 @@ class UIOptionsController implements ControllerProviderInterface
                 $this->session->getFlashBag()->add('ui-options', [
                     'type' => 'success',
                     'message' => 'Theme options successfully updated!',
+                ]);
+            }else {
+                $this->session->getFlashBag()->add('ui-options', [
+                    'type' => 'danger',
+                    'message' => 'Something went wrong while saving theme options!',
                 ]);
             }
         }
