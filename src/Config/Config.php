@@ -41,7 +41,7 @@ class Config
      */
     public function __construct(array $config)
     {
-        $this->addExtensionTabs($config['options']);
+        $this->addExtensionTabs($config['ui-options']);
     }
 
     /**

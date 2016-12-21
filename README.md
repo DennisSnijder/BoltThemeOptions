@@ -9,8 +9,10 @@ Setup
 ======================
 Define tabs and option fields in the extension its config file.
 
+Or add the example below to your 'theme.yml' file
+
 ```
-options:
+ui-options:
     -
         name: 'Example options'
         slug: example-options

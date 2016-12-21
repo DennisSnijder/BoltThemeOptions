@@ -4,6 +4,7 @@ namespace Bolt\Extension\Snijder\BoltUIOptions\Provider;
 
 use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
 use Bolt\Extension\Snijder\BoltUIOptions\Controller\UIOptionsTwigFunctionController;
+use Bolt\Filesystem\Exception\IOException;
 use Bolt\Filesystem\Handler\YamlFile;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
@@ -55,9 +56,11 @@ class UIOptionsProvider implements ServiceProviderInterface
         );
 
         $app->extend('ui.options.config', function(Config $config) use ($app) {
-            /** @var YamlFile $file */
-            $file = $app['filesystem']->get("theme://theme.yml");
-            if($file == null) {
+
+            try {
+                /** @var YamlFile $file */
+                $file = $app['filesystem']->get("theme://theme.yml");
+            }catch(IOException $e) {
                 return $config;
             }
 
