@@ -22,7 +22,6 @@ class Config
      */
     protected $tabs = [];
 
-
     /**
      * @var Tab[]
      */
@@ -60,8 +59,11 @@ class Config
 
     public function addThemeTabs($rawTabs)
     {
+
+        $keyOffset = count($this->tabs);
+
         foreach ($rawTabs as $key => $rawTab) {
-            $tab = $this->convertTabAndFields($rawTab, $key);
+            $tab = $this->convertTabAndFields($rawTab, $key + $keyOffset);
             $this->themeTabs[$tab->getSlug()] = $tab;
         }
     }
@@ -95,13 +97,20 @@ class Config
 
 
     /**
+     * @param bool $themeTabs
      * @return array
      */
-    public function getArrayOptions()
+    public function getArrayOptions($themeTabs = false)
     {
         $resultArray = [];
 
-        foreach ($this->tabs as $tab) {
+        if($themeTabs) {
+            $tabs = $this->getThemeTabs();
+        }else {
+            $tabs = $this->tabs;
+        }
+
+        foreach ($tabs as $tab) {
             $tabFields = [];
             foreach ($tab->getFields() as $field) {
 

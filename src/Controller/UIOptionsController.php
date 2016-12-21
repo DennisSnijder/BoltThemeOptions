@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Symfony\Component\Yaml\Parser;
 
 /**
  * Class UIOptionsController.
@@ -43,6 +44,10 @@ class UIOptionsController implements ControllerProviderInterface
      * @var UrlGeneratorFragmentWrapper
      */
     private $urlGenerator;
+    /**
+     * @var
+     */
+    private $themeFilePath;
 
     /**
      * ThemeOptionsController constructor.
@@ -52,13 +57,15 @@ class UIOptionsController implements ControllerProviderInterface
      * @param Manager $filesystem
      * @param UrlGeneratorFragmentWrapper $urlGenerator
      * @param $optionFilePath
+     * @param $themeFilePath
      */
     public function __construct(
         \Twig_Environment $twig,
         Config $config,
         Manager $filesystem,
         UrlGeneratorFragmentWrapper $urlGenerator,
-        $optionFilePath
+        $optionFilePath,
+        $themeFilePath
     )
     {
         $this->twig = $twig;
@@ -66,6 +73,7 @@ class UIOptionsController implements ControllerProviderInterface
         $this->filesystem = $filesystem;
         $this->urlGenerator = $urlGenerator;
         $this->optionFilePath = $optionFilePath;
+        $this->themeFilePath = $themeFilePath;
     }
 
     /**
@@ -110,14 +118,29 @@ class UIOptionsController implements ControllerProviderInterface
      */
     public function handleThemeOptionsSaveFromRequest(Request $request)
     {
-        $file = new YamlFile();
-        $this->filesystem->getFile($this->optionFilePath, $file);
-        $rawOptions = $file->parse();
+        if($request->get('extension')) {
+            $this->saveExtensionOptions($request->get('extension'));
+        }
 
+        if($request->get('theme')) {
+            $this->saveThemeOptions($request->get('theme'));
+        }
+
+        return new RedirectResponse($this->urlGenerator->generate('ui.options'));
+    }
+
+    /**
+     * @param $requestOptions
+     */
+    protected function saveExtensionOptions($requestOptions)
+    {
+        $file = new YamlFile();
+        $this->filesystem->getFile($this->themeFilePath, $file);
+        $rawOptions = $file->parse();
 
         //todo check keys for existence
         $tabs = $this->config->getTabs();
-        foreach ($request->request->all() as $tabKey => $rawFields) {
+        foreach ($requestOptions as $tabKey => $rawFields) {
             $tab = $tabs[$tabKey];
 
             $fields = $tab->getFields();
@@ -132,13 +155,46 @@ class UIOptionsController implements ControllerProviderInterface
 
         $newFile = new YamlFile();
         $newFile->setFilesystem($this->filesystem);
-        $newFile->setPath($this->optionFilePath);
+        $newFile->setPath($this->themeFilePath);
 
         $newFile->dump($rawOptions, [
             'objectSupport' => true,
             'inline' => 7
         ]);
-
-        return new RedirectResponse($this->urlGenerator->generate('ui.options'));
     }
+
+    /**
+     * @param $requestOptions
+     */
+    protected function saveThemeOptions($requestOptions)
+    {
+        $yamlParser = new Parser();
+        $rawThemeconfig = file_get_contents($this->themeFilePath."/theme.yml");
+        $rawOptions = $yamlParser->parse($rawThemeconfig);
+
+        //todo check keys for existence
+        $tabs = $this->config->getThemeTabs();
+        foreach ($requestOptions as $tabKey => $rawFields) {
+            $tab = $tabs[$tabKey];
+
+            $fields = $tab->getFields();
+            foreach ($rawFields as $fieldKey => $value) {
+                $field = $fields[$fieldKey];
+                $field->setValue($value);
+            }
+        }
+
+        //todo check for options key existence
+        $rawOptions['ui-options'] = $this->config->getArrayOptions(true);
+
+        $newFile = new YamlFile();
+        $newFile->setFilesystem($this->filesystem);
+        $newFile->setPath($this->themeFilePath);
+
+        $newFile->dump($rawOptions, [
+            'objectSupport' => true,
+            'inline' => 7
+        ]);
+    }
+
 }

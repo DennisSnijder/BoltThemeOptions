@@ -28,13 +28,13 @@
                         {% for field in tab.getFields %}
 
                             {% if field.getType() == "text" %}
-                                {% include '@UIOptions/types/text.twig' with {field: field, tab: tab} %}
+                                {% include '@UIOptions/types/text.twig' with {field: field, tab: tab, type: "extension"} %}
                             {% elseif field.getType() == "date" %}
-                                {% include '@UIOptions/types/date.twig' with {field: field, tab: tab} %}
+                                {% include '@UIOptions/types/date.twig' with {field: field, tab: tab, type: "extension"} %}
                             {% elseif field.getType() == "textarea" %}
-                                {% include '@UIOptions/types/textarea.twig' with {field: field, tab: tab} %}
+                                {% include '@UIOptions/types/textarea.twig' with {field: field, tab: tab, type: "extension"} %}
                             {% elseif field.getType() == "select" %}
-                                {% include '@UIOptions/types/select.twig' with {field: field, tab: tab} %}
+                                {% include '@UIOptions/types/select.twig' with {field: field, tab: tab, type: "extension"} %}
                             {% endif %}
 
                         {% endfor %}
@@ -47,13 +47,13 @@
                         {% for field in tab.getFields %}
 
                             {% if field.getType() == "text" %}
-                                {% include '@UIOptions/types/text.twig' with {field: field, tab: tab} %}
+                                {% include '@UIOptions/types/text.twig' with {field: field, tab: tab, type: "theme"} %}
                             {% elseif field.getType() == "date" %}
-                                {% include '@UIOptions/types/date.twig' with {field: field, tab: tab} %}
+                                {% include '@UIOptions/types/date.twig' with {field: field, tab: tab, type: "theme"} %}
                             {% elseif field.getType() == "textarea" %}
-                                {% include '@UIOptions/types/textarea.twig' with {field: field, tab: tab} %}
+                                {% include '@UIOptions/types/textarea.twig' with {field: field, tab: tab, type: "theme"} %}
                             {% elseif field.getType() == "select" %}
-                                {% include '@UIOptions/types/select.twig' with {field: field, tab: tab} %}
+                                {% include '@UIOptions/types/select.twig' with {field: field, tab: tab, type: "theme"} %}
                             {% endif %}
 
                         {% endfor %}

@@ -4,6 +4,7 @@ namespace Bolt\Extension\Snijder\BoltUIOptions\Provider;
 
 use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
 use Bolt\Extension\Snijder\BoltUIOptions\Controller\UIOptionsTwigFunctionController;
+use Bolt\Filesystem\Handler\YamlFile;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\Yaml\Parser;
@@ -53,17 +54,17 @@ class UIOptionsProvider implements ServiceProviderInterface
             }
         );
 
-
         $app->extend('ui.options.config', function(Config $config) use ($app) {
+            /** @var YamlFile $file */
+            $file = $app['filesystem']->get("theme://theme.yml");
+            if($file == null) {
+                return $config;
+            }
 
-            $path = $app['resources']->getPath('theme');
+            $options = $file->parse();
 
-            $yamlParser = new Parser();
-            $rawThemeconfig = file_get_contents($path."/theme.yml");
-            $options = $yamlParser->parse($rawThemeconfig);
-
-            if(!empty($options['options'])) {
-                $config->addThemeTabs($options['options']);
+            if(!empty($options['ui-options'])) {
+                $config->addThemeTabs($options['ui-options']);
             }
 
             return $config;

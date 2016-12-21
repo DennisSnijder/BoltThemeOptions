@@ -80,7 +80,8 @@ class BoltUIOptionsExtension extends SimpleExtension
               $this->container['ui.options.config'],
               $this->container['filesystem'],
               $this->container['url_generator'],
-              sprintf('config://extensions/%s.%s.yml', strtolower($this->getName()), strtolower($this->getVendor()))
+              sprintf('config://extensions/%s.%s.yml', strtolower($this->getName()), strtolower($this->getVendor())),
+              "theme://theme.yml"
           ),
         ];
     }
