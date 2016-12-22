@@ -94,13 +94,13 @@ class BoltUIOptionsExtension extends SimpleExtension
     {
 
         $spectrumStyle = new Stylesheet();
-        $spectrumStyle->setFileName('vendor/spectrum/spectrum.css')
+        $spectrumStyle->setFileName('/lib/spectrum/spectrum.css')
             ->setZone(Zone::BACKEND)
         ;
 
 
         $spectrumJS = new JavaScript();
-        $spectrumJS->setFileName('/vendor/spectrum/spectrum.js')
+        $spectrumJS->setFileName('/lib/spectrum/spectrum.js')
             ->setZone(Zone::BACKEND)
         ;
 
