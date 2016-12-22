@@ -7,6 +7,10 @@
     width: 40%;
 }
 
+.option-wrapper input[type=date] {
+    line-height: normal;
+}
+
 .option-wrapper textarea {
     padding: 5px;
     width: 40%;
@@ -17,6 +21,6 @@
     padding: 5px;
 }
 
-.option-wrapper button {
+.ui-options button {
     margin: 5px;
 }
