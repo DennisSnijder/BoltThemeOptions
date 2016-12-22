@@ -60,8 +60,14 @@ ui-options:
 
 Usage
 ======================
-in a twig template use the following function to render the option value
+In a twig template use the following function to render the option value
 
 ```
 {{ uioption('my-option-slug') }}
+```
+
+Or use the option value within your extension
+
+```
+$app['ui.options']->getOptionValue('my-option-slug');
 ```

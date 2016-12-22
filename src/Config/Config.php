@@ -158,4 +158,10 @@ class Config
     {
         return $this->fields;
     }
+
+
+    public function get()
+    {
+        
+    }
 }

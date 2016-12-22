@@ -4,6 +4,7 @@ namespace Bolt\Extension\Snijder\BoltUIOptions\Provider;
 
 use Bolt\Extension\Snijder\BoltUIOptions\Config\Config;
 use Bolt\Extension\Snijder\BoltUIOptions\Controller\UIOptionsTwigFunctionController;
+use Bolt\Extension\Snijder\BoltUIOptions\UIOptions;
 use Bolt\Filesystem\Exception\IOException;
 use Bolt\Filesystem\Handler\YamlFile;
 use Silex\Application;
@@ -44,6 +45,13 @@ class UIOptionsProvider implements ServiceProviderInterface
         $app['ui.options.config'] = $app->share(
             function () {
                 return new Config($this->config);
+            }
+        );
+
+
+        $app['ui.options'] = $app->share(
+            function($app) {
+                return new UIOptions($app['ui.options.config']);
             }
         );
 
