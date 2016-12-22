@@ -167,7 +167,7 @@ class UIOptionsController implements ControllerProviderInterface
      */
     protected function saveExtensionOptions($requestOptions)
     {
-        $rawOptions = $this->getParsedYamlFile($this->themeFilePath);
+        $rawOptions = $this->getParsedYamlFile($this->optionFilePath);
         $this->updateTabs($this->config->getTabs(), $requestOptions);
 
         if (isset($rawOptions['ui-options'])) {
