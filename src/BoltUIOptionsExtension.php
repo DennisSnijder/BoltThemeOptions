@@ -2,6 +2,7 @@
 
 namespace Bolt\Extension\Snijder\BoltUIOptions;
 
+use Bolt\Asset\File\JavaScript;
 use Bolt\Asset\File\Stylesheet;
 use Bolt\Controller\Zone;
 use Bolt\Extension\SimpleExtension;
@@ -91,15 +92,22 @@ class BoltUIOptionsExtension extends SimpleExtension
      */
     protected function registerAssets()
     {
-        $asset = new Stylesheet();
+        $UIOptionStyle = new Stylesheet();
+        $UIOptionStyle->setFileName('ui-options.css')
+            ->setZone(Zone::BACKEND)
+            ->setLate(true)
+        ;
 
-        $asset->setFileName('ui-options.css')
+
+        $UIOptionJS = new JavaScript();
+        $UIOptionJS->setFileName('ui-options.js')
             ->setZone(Zone::BACKEND)
             ->setLate(true)
         ;
 
         return [
-            $asset,
+            $UIOptionStyle,
+            $UIOptionJS
         ];
     }
 }

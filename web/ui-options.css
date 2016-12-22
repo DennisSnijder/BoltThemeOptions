@@ -16,3 +16,7 @@
     width: 40%;
     padding: 5px;
 }
+
+.option-wrapper button {
+    margin: 5px;
+}
