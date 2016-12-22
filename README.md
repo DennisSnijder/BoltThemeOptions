@@ -50,6 +50,11 @@ ui-options:
                 slug: another-date-field
                 value: '2016-12-22'
                 type: date
+            -
+                name: 'Color option'
+                slug: color-field
+                value: '#f00'
+                type: color
 ```
 
 

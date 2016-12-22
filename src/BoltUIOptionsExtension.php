@@ -92,6 +92,18 @@ class BoltUIOptionsExtension extends SimpleExtension
      */
     protected function registerAssets()
     {
+
+        $spectrumStyle = new Stylesheet();
+        $spectrumStyle->setFileName('vendor/spectrum/spectrum.css')
+            ->setZone(Zone::BACKEND)
+        ;
+
+
+        $spectrumJS = new JavaScript();
+        $spectrumJS->setFileName('/vendor/spectrum/spectrum.js')
+            ->setZone(Zone::BACKEND)
+        ;
+
         $UIOptionStyle = new Stylesheet();
         $UIOptionStyle->setFileName('ui-options.css')
             ->setZone(Zone::BACKEND)
@@ -106,6 +118,8 @@ class BoltUIOptionsExtension extends SimpleExtension
         ;
 
         return [
+            $spectrumStyle,
+            $spectrumJS,
             $UIOptionStyle,
             $UIOptionJS
         ];
