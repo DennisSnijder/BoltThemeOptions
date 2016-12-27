@@ -22,6 +22,11 @@ ui-options:
                 slug: text-field
                 value: 'Hello textfield!'
                 type: text
+             -
+                 name: 'Number option'
+                 slug: number-field
+                 value: 1337
+                 type: number
             -
                 name: 'Textarea option'
                 slug: text-area

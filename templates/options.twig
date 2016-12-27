@@ -46,6 +46,8 @@
                                 {% include '@UIOptions/types/color.twig' with {field: field, tab: tab, type: "extension"} %}
                             {% elseif field.getType() == "radio" %}
                                 {% include '@UIOptions/types/radio.twig' with {field: field, tab: tab, type: "extension"} %}
+                            {% elseif field.getType() == "number" %}
+                                {% include '@UIOptions/types/number.twig' with {field: field, tab: tab, type: "extension"} %}
                             {% endif %}
 
                         {% endfor %}
@@ -69,6 +71,8 @@
                                 {% include '@UIOptions/types/color.twig' with {field: field, tab: tab, type: "theme"} %}
                             {% elseif field.getType() == "radio" %}
                                 {% include '@UIOptions/types/radio.twig' with {field: field, tab: tab, type: "theme"} %}
+                            {% elseif field.getType() == "number" %}
+                                {% include '@UIOptions/types/number.twig' with {field: field, tab: tab, type: "theme"} %}
                             {% endif %}
 
                         {% endfor %}
