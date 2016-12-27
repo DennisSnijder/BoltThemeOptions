@@ -7,6 +7,11 @@
     width: 40%;
 }
 
+.option-wrapper input[type=radio] {
+    width:auto;
+    margin:5px;
+}
+
 .option-wrapper input[type=date] {
     line-height: normal;
 }

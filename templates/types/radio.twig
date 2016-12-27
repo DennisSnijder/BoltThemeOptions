@@ -1,0 +1,8 @@
+<div class="option-wrapper">
+    <label for="{{ field.getSlug() }}" class="option-title">{{ field.getName() }}</label>
+
+    {% for option in field.getOptions() %}
+        <input name="{{ type }}[{{ tab.getSlug() }}][{{ field.getSlug() }}]" type="radio" {% if field.getValue() == option %} checked {% endif %} value="{{ option }}" /> {{ option }} <br />
+    {% endfor %}
+
+</div>

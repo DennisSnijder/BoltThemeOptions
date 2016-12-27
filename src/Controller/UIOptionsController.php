@@ -27,14 +27,17 @@ class UIOptionsController implements ControllerProviderInterface
      * @var \Twig_Environment
      */
     private $twig;
+
     /**
      * @var Config
      */
     private $config;
+
     /**
      * @var Manager
      */
     private $filesystem;
+
     /**
      * @var
      */
@@ -44,10 +47,12 @@ class UIOptionsController implements ControllerProviderInterface
      * @var UrlGeneratorFragmentWrapper
      */
     private $urlGenerator;
+
     /**
      * @var
      */
     private $themeFilePath;
+
     /**
      * @var Session
      */
