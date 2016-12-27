@@ -37,6 +37,15 @@ ui-options:
                     - "Second option"
                     - "Third option"
             -
+                name: 'Radio option'
+                slug: radio-option
+                value: "First option"
+                type: radio
+                options:
+                    - "First option"
+                    - "Second option"
+                    - "Third option"
+            -
                 name: 'Date option'
                 slug: date-field
                 value: '2016-12-22'
