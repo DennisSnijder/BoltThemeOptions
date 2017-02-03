@@ -77,6 +77,16 @@ class UIOptionsProvider implements ServiceProviderInterface
 
             return $config;
         });
+
+        $app['ui.options.config.file'] = $app->share(
+            function ($app) {
+                $extension = $app['extensions']->get('Snijder/BoltUIOptions');
+                $filePath = sprintf('config://extensions/%s.%s.yml', strtolower($extension->getName()), strtolower($extension->getVendor()));
+
+                return $app['filesystem']->get($filePath);
+            }
+        );
+
     }
 
     /**
