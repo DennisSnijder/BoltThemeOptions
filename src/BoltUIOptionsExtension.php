@@ -9,6 +9,7 @@ use Bolt\Extension\SimpleExtension;
 use Bolt\Extension\Snijder\BoltUIOptions\Controller\UIOptionsController;
 use Bolt\Extension\Snijder\BoltUIOptions\Provider\UIOptionsProvider;
 use Bolt\Menu\MenuEntry;
+use Bolt\Version;
 
 /**
  * Class BoltUIOptionsExtension.
@@ -74,16 +75,13 @@ class BoltUIOptionsExtension extends SimpleExtension
      */
     protected function registerBackendControllers()
     {
+        $extendBaseUrl = Version::compare('3.2.999', '<')
+            ? '/extensions/'
+            : '/extend/'
+        ;
+
         return [
-          '/extend/'.$this->backendURL => new UIOptionsController(
-              $this->container['twig'],
-              $this->container['ui.options.config'],
-              $this->container['filesystem'],
-              $this->container['url_generator'],
-              $this->container['session'],
-              sprintf('config://extensions/%s.%s.yml', strtolower($this->getName()), strtolower($this->getVendor())),
-              'theme://theme.yml'
-          ),
+            $extendBaseUrl . $this->backendURL => new UIOptionsController(),
         ];
     }
 

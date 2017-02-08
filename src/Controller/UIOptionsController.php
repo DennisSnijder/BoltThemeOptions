@@ -7,14 +7,12 @@ use Bolt\Extension\Snijder\BoltUIOptions\Model\Tab;
 use Bolt\Filesystem\Exception\DumpException;
 use Bolt\Filesystem\Handler\YamlFile;
 use Bolt\Filesystem\Manager;
-use Bolt\Routing\UrlGeneratorFragmentWrapper;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class UIOptionsController.
@@ -23,11 +21,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
  */
 class UIOptionsController implements ControllerProviderInterface
 {
-    /**
-     * @var \Twig_Environment
-     */
-    private $twig;
-
     /**
      * @var Config
      */
@@ -41,51 +34,7 @@ class UIOptionsController implements ControllerProviderInterface
     /**
      * @var
      */
-    private $optionFilePath;
-
-    /**
-     * @var UrlGeneratorFragmentWrapper
-     */
-    private $urlGenerator;
-
-    /**
-     * @var
-     */
-    private $themeFilePath;
-
-    /**
-     * @var Session
-     */
-    private $session;
-
-    /**
-     * ThemeOptionsController constructor.
-     *
-     * @param \Twig_Environment           $twig
-     * @param Config                      $config
-     * @param Manager                     $filesystem
-     * @param UrlGeneratorFragmentWrapper $urlGenerator
-     * @param Session                     $session
-     * @param $optionFilePath
-     * @param $themeFilePath
-     */
-    public function __construct(
-        \Twig_Environment $twig,
-        Config $config,
-        Manager $filesystem,
-        UrlGeneratorFragmentWrapper $urlGenerator,
-        Session $session,
-        $optionFilePath,
-        $themeFilePath
-    ) {
-        $this->twig = $twig;
-        $this->config = $config;
-        $this->filesystem = $filesystem;
-        $this->urlGenerator = $urlGenerator;
-        $this->optionFilePath = $optionFilePath;
-        $this->themeFilePath = $themeFilePath;
-        $this->session = $session;
-    }
+    private $optionFile;
 
     /**
      * Returns routes to connect to the given application.
@@ -102,18 +51,37 @@ class UIOptionsController implements ControllerProviderInterface
         $controllers->get('/', [$this, 'renderThemeOptionsBackendPage'])->bind('ui.options');
         $controllers->post('/post', [$this, 'handleThemeOptionsSaveFromRequest'])->bind('ui.options.save');
 
+        $controllers->before([$this, 'before']);
+
         return $controllers;
+    }
+
+    /**
+     * Middleware to run before the request cycle begins.
+     *
+     * @param Request     $request
+     * @param Application $app
+     */
+    public function before(Request $request, Application $app)
+    {
+        $this->config = $app['ui.options.config'];
+        $this->filesystem = $app['filesystem'];
+        $this->optionFile = $app['ui.options.config.file'];
     }
 
     /**
      * Renders the main Theme Options page.
      *
+     * @param Application $app
+     *
      * @return Response
      */
-    public function renderThemeOptionsBackendPage()
+    public function renderThemeOptionsBackendPage(Application $app)
     {
+        $twig = $app['twig'];
+
         return new Response(
-            $this->twig->render(
+            $twig->render(
                 '@UIOptions/options.twig',
                 [
                     'tabs' => $this->config->getTabs(),
@@ -126,41 +94,46 @@ class UIOptionsController implements ControllerProviderInterface
     /**
      * Handles the request for ui options saving, on both extension and theme options.
      *
-     * @param Request $request
+     * @param Application $app
+     * @param Request     $request
      *
      * @return Response
      */
-    public function handleThemeOptionsSaveFromRequest(Request $request)
+    public function handleThemeOptionsSaveFromRequest(Application $app, Request $request)
     {
-        if ($request->get('extension')) {
-            if ($this->saveExtensionOptions($request->get('extension'))) {
-                $this->session->getFlashBag()->add('ui-options', [
+        $session = $app['session'];
+        $extensionOptions = $request->request->get('extension');
+        if ($extensionOptions) {
+            if ($this->saveExtensionOptions($extensionOptions)) {
+                $session->getFlashBag()->add('ui-options', [
                     'type' => 'success',
                     'message' => 'Extension options successfully updated!',
                 ]);
-            }else {
-                $this->session->getFlashBag()->add('ui-options', [
+            } else {
+                $session->getFlashBag()->add('ui-options', [
                     'type' => 'danger',
                     'message' => 'Something went wrong while saving extension options!',
                 ]);
             }
         }
 
-        if ($request->get('theme')) {
-            if ($this->saveThemeOptions($request->get('theme'))) {
-                $this->session->getFlashBag()->add('ui-options', [
+        $themeOptions = $request->request->get('theme');
+        if ($themeOptions) {
+            if ($this->saveThemeOptions($themeOptions)) {
+                $session->getFlashBag()->add('ui-options', [
                     'type' => 'success',
                     'message' => 'Theme options successfully updated!',
                 ]);
-            }else {
-                $this->session->getFlashBag()->add('ui-options', [
+            } else {
+                $session->getFlashBag()->add('ui-options', [
                     'type' => 'danger',
                     'message' => 'Something went wrong while saving theme options!',
                 ]);
             }
         }
+        $targetUrl = $app['url_generator']->generate('ui.options');
 
-        return new RedirectResponse($this->urlGenerator->generate('ui.options'));
+        return new RedirectResponse($targetUrl);
     }
 
     /**
@@ -172,13 +145,13 @@ class UIOptionsController implements ControllerProviderInterface
      */
     protected function saveExtensionOptions($requestOptions)
     {
-        $rawOptions = $this->getParsedYamlFile($this->optionFilePath);
+        $rawOptions = $this->getParsedYamlFile($this->optionFile);
         $this->updateTabs($this->config->getTabs(), $requestOptions);
 
         if (isset($rawOptions['ui-options'])) {
             $rawOptions['ui-options'] = $this->config->getArrayOptions();
 
-            return $this->saveYamlFile($rawOptions, $this->optionFilePath);
+            return $this->saveYamlFile($this->optionFile, $rawOptions);
         }
 
         return false;
@@ -193,13 +166,19 @@ class UIOptionsController implements ControllerProviderInterface
      */
     protected function saveThemeOptions($requestOptions)
     {
-        $rawOptions = $this->getParsedYamlFile($this->themeFilePath);
+        $themeFilePath = 'theme://theme.yml';
+        if (!$this->filesystem->has($themeFilePath)) {
+            return true;
+        }
+
+        $themeFile = $this->filesystem->get($themeFilePath);
+        $rawOptions = $this->getParsedYamlFile($themeFile);
         $this->updateTabs($this->config->getThemeTabs(), $requestOptions);
 
         if (isset($rawOptions['ui-options'])) {
             $rawOptions['ui-options'] = $this->config->getArrayOptions(true);
 
-            return $this->saveYamlFile($rawOptions, $this->themeFilePath);
+            return $this->saveYamlFile($themeFile, $rawOptions);
         }
 
         return false;
@@ -208,16 +187,17 @@ class UIOptionsController implements ControllerProviderInterface
     /**
      * Gets a parsed Yaml file by its path.
      *
-     * @param $path
+     * @param YamlFile $yamlFile
      *
      * @return mixed
      */
-    protected function getParsedYamlFile($path)
+    protected function getParsedYamlFile(YamlFile $yamlFile)
     {
-        $file = new YamlFile();
-        $this->filesystem->getFile($path, $file);
+        if (!$yamlFile->exists()) {
+            return [];
+        }
 
-        return $file->parse();
+        return $yamlFile->parse();
     }
 
     /**
@@ -251,19 +231,15 @@ class UIOptionsController implements ControllerProviderInterface
     /**
      * Saves the Yaml file.
      *
-     * @param array $data
-     * @param $path
+     * @param YamlFile $yamlFile
+     * @param array    $data
      *
      * @return bool
      */
-    protected function saveYamlFile(array $data, $path)
+    protected function saveYamlFile(YamlFile $yamlFile, array $data)
     {
-        $newFile = new YamlFile();
-        $newFile->setFilesystem($this->filesystem);
-        $newFile->setPath($path);
-
         try {
-            $newFile->dump($data, [
+            $yamlFile->dump($data, [
                 'objectSupport' => true,
                 'inline' => 7,
             ]);
