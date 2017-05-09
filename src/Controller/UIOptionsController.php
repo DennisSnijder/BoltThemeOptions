@@ -64,6 +64,11 @@ class UIOptionsController implements ControllerProviderInterface
      */
     public function before(Request $request, Application $app)
     {
+        if (!$app['users']->isAllowed('dashboard')) {
+            /** @var UrlGeneratorInterface $generator */
+            $generator = $app['url_generator'];
+            return new RedirectResponse($generator->generate('dashboard'), Response::HTTP_SEE_OTHER);
+        }
         $this->config = $app['ui.options.config'];
         $this->filesystem = $app['filesystem'];
         $this->optionFile = $app['ui.options.config.file'];
