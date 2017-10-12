@@ -35,7 +35,7 @@ class UIOptionsTwigFunctionController
     {
         $fields = $this->config->getFields();
 
-        if ($fields[$name] == null) {
+        if (!array_key_exists($name, $fields) || $fields[$name] == null) {
             return '';
         }
 
