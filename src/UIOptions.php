@@ -35,7 +35,7 @@ class UIOptions
     {
         $fields = $this->config->getFields();
 
-        if ($fields[$slug] == null) {
+        if (!array_key_exists($slug, $fields) || $fields[$slug] == null) {
             return '';
         }
 
